@@ -41,7 +41,7 @@ jobs:
 
     # Specify the container in which actions will run
     container:
-      image: codeql-container:f0f91db
+      image: node:18
 
     steps:
     - name: Checkout repository
