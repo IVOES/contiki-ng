@@ -4,7 +4,7 @@ import json
 import sys
 
 # Return whether SARIF file contains error-level results
-def codeql_sarif_contain_error(filename):
+def codeql_sarif_contain_error(filename: str) -> bool:
     with open(filename, 'r') as f:
         s = json.load(f)
 
