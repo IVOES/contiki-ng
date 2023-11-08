@@ -40,7 +40,7 @@ jobs:
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     # Specify the container in which actions will run
-    container: codeql-container
+    container: mcr.microsoft.com/cstsectools/codeql-container
 
     steps:
     - name: Checkout repository
