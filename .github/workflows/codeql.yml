@@ -15,7 +15,7 @@ on:
   # push:
   #   branches: [ "main", "master" ]
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 3 * * *'
   # pull_request:
   #   branches: '*'
 
@@ -27,7 +27,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-20.04' }}
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-22.04' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
       actions: read
@@ -49,10 +49,15 @@ jobs:
       options: --user root
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout github repo (+ download lfs dependencies)
+      uses: actions/checkout@v4
       with:
-        submodules: recursive
+          fetch-depth: 2
+          submodules: 'recursive'
+          persist-credentials: false
+          lfs: true
+    - name: Checkout LFS objects
+      run: git lfs checkout
 
     - name: arm-none-eabi-gcc GNU Arm Embedded Toolchain
       uses: carlosperate/arm-none-eabi-gcc-action@v1.6.0
@@ -129,4 +134,4 @@ jobs:
       with:
         name: codeql-results
         path: ${{ steps.step1.outputs.sarif-output }}
-        retention-days: 5
+        retention-days: 14
