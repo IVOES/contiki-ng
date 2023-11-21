@@ -36,24 +36,28 @@
  * 	Nicolas Tsiftes <nvt@acm.org>
  */
 
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
-
-#include "contiki.h"
-#include "lib/heapmem.h"
-#include "sys/cc.h"
-
-#ifdef HEAPMEM_CONF_ARENA_SIZE
-
 /* Log configuration */
 #include "sys/log.h"
 #define LOG_MODULE "HeapMem"
 #define LOG_LEVEL LOG_LEVEL_WARN
 
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "lib/heapmem.h"
+#include "sys/cc.h"
+
 /* The HEAPMEM_CONF_ARENA_SIZE parameter determines the size of the
    space that will be statically allocated in this module. */
+#ifdef HEAPMEM_CONF_ARENA_SIZE
 #define HEAPMEM_ARENA_SIZE HEAPMEM_CONF_ARENA_SIZE
+#else
+/* If the heap size is not set, we use a minimal size that will ensure
+   that all allocation attempts fail. */
+#define HEAPMEM_ARENA_SIZE 1
+#endif
+/* HEAPMEM_CONF_ARENA_SIZE */
 
 /*
  * The HEAPMEM_CONF_SEARCH_MAX parameter limits the time spent on
@@ -172,8 +176,7 @@ static size_t heap_usage;
 static chunk_t *first_chunk = (chunk_t *)heap_base;
 static chunk_t *free_list;
 
-#define IN_HEAP(ptr) ((ptr) != NULL && \
-                     (char *)(ptr) >= (char *)heap_base) && \
+#define IN_HEAP(ptr) ((char *)(ptr) >= (char *)heap_base) && \
                      ((char *)(ptr) < (char *)heap_base + heap_usage)
 
 /* extend_space: Increases the current footprint used in the heap, and
@@ -443,9 +446,7 @@ heapmem_free(void *ptr)
 #endif
 {
   if(!IN_HEAP(ptr)) {
-    if(ptr) {
-      LOG_WARN("%s: ptr %p is not in the heap\n", __func__, ptr);
-    }
+    LOG_WARN("%s: ptr %p is not in the heap\n", __func__, ptr);
     return false;
   }
 
@@ -612,5 +613,3 @@ heapmem_alignment(void)
 {
   return HEAPMEM_ALIGNMENT;
 }
-
-#endif /* HEAPMEM_CONF_ARENA_SIZE */

@@ -177,7 +177,6 @@ storage_get_relation(relation_t *rel, char *name)
     }
   }
 
-  (void)i;
   PRINTF("DB: Read %d attributes\n", i);
 
   cfs_close(fd);
@@ -334,7 +333,7 @@ error:
 db_result_t
 storage_get_index(index_t *index, relation_t *rel, attribute_t *attr)
 {
-  char filename[INDEX_NAME_LENGTH + 1];
+  char filename[INDEX_NAME_LENGTH];
   int fd;
   int r;
   struct index_record record;
@@ -370,7 +369,7 @@ storage_get_index(index_t *index, relation_t *rel, attribute_t *attr)
 db_result_t
 storage_put_index(index_t *index)
 {
-  char filename[INDEX_NAME_LENGTH + 1];
+  char filename[INDEX_NAME_LENGTH];
   int fd;
   int r;
   struct index_record record;

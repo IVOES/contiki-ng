@@ -34,7 +34,6 @@
 
 #include <string.h>
 
-#if UIP_UDP
 PROCESS(udp_socket_process, "UDP socket process");
 
 static uint8_t buf[UIP_BUFSIZE];
@@ -193,5 +192,4 @@ PROCESS_THREAD(udp_socket_process, ev, data)
 
   PROCESS_END();
 }
-#endif /* UIP_UDP */
 /*---------------------------------------------------------------------------*/

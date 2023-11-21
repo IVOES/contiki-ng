@@ -1,3 +1,5 @@
+MAKEFILES_CUSTOMRULES += $(CONTIKI_NG_RELOC_CPU_DIR)/arm/cortex-m/Makefile.customrules-cortex-m
+
 ifndef CMSIS_PATH
     CMSIS_PATH = CMSIS/CMSIS
 
